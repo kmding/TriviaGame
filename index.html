@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+
+<div id= "timeDisplay"></div>
+
+<div class = theOneQuestion></div>
+<ul class = theAnswers></ul>
+<button class = startButton>Start</button>
+<!-- answer aftermath -->
+<div class = 'message'></div>
+<div class = 'rightAnswer'></div>
+<div class = 'thisPictureOverHere'></div>
+<!-- scoreboard display -->
+<div class = 'finalMessage'></div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.js"></script>
+<script>
+	// timer int
+	var setTime = 5;
+
+	// q tallys
+	var correctAnsw = 0;
+	var inCorrectAnsw = 0;
+	var unAnsw =0;
+
+	// user select
+	var userSelected;
+	// the int that moves 'questions var' to the next question
+	var currentQuestion = 0;
+	
+
+	// start button
+	$('.startButton').on("click", function(){
+		$(this).hide();
+		go();
+		qDisplay();
+		
+	});
+	
+	// more timer stuff
+	function go(){
+	countDown = setInterval(theFinalCountDown, 1000);
+	}
+	
+	// when things get to zero
+	function theFinalCountDown(){
+		setTime--;
+		$('#timeDisplay').html('<h2>' + setTime + '</h2>');
+		if (setTime === 0){
+			clearInterval(countDown);
+			realAnswer();
+		}
+	}
+
+
+	// the trivia
+	var questions = [{
+		// array 0 question[0].question
+		ques: "Who is Batman's alter ego?",
+		choice: ["Dick Greyson", "Peter Parker", "Bruce Wayne", "Clark Kent"],
+		answer: 2
+	}, {
+		
+		ques: "Where is Batman from?",
+		choice: ["Gotham City", "Metropolis", "Central City", "Themiscara"],
+		answer: 0
+	}, {
+		ques: "Who killed Thomas and Martha Wayne?",
+		choice: ["Matches Malone", "The Joker", "Random thug number three", "Joe Chill"],
+		answer: 3
+	}, {
+		ques: "What is Batman's super powers?",
+		choice: ["mind reader", "none", "imagination", "powers of the bat"],
+		answer: 1
+	}, {
+		ques: "Where is Gotham located?",
+		choice: ["Middle Earth", "Equestria", "New Jersey", "New York"],
+		answer: 2
+	}, {
+		ques: "What is Bruce Wayne's day time job?",
+		choice: ["Reporter", "Teacher", "Billionair/Playboy/Philanthropist", "Governer"],
+		answer: 2
+	}]; 
+
+
+
+	// display questions
+	function qDisplay(){
+		setTime = 5;
+		go();
+	$('.theOneQuestion').html(questions[currentQuestion].ques);
+
+		for (var i = 0; i < 4; i++) {
+			var selectableAnsw = $('<button>');
+			selectableAnsw.text(questions[currentQuestion].choice[i]);
+			selectableAnsw.attr({'data-index': i});
+			selectableAnsw.addClass('userCell');
+			$('.theAnswers').append(selectableAnsw);
+		} 
+
+		$('.userCell').on("click",function(){
+				userSelected = $(this).data('index');
+				clearInterval(countDown); 
+				// display real answer
+				realAnswer();
+		});
+	}
+
+	function realAnswer(){
+			$('.theAnswers').empty();
+			$('.theOneQuestion').html(" ");
+		if (setTime === 0){
+			unAnsw++;
+			$('.message').html('you ran out of time!');
+		}
+
+		else if (userSelected == questions[currentQuestion].answer){
+			correctAnsw++;
+			$('.message').html('you got it.');
+
+		}
+
+		else if (userSelected != questions[currentQuestion].answer){
+			inCorrectAnsw++;
+			$('.message').html('wrong!!!');
+		}
+		if (currentQuestion == questions.length-1){
+			scoreboard();
+		}
+			//let this hover, this only adds to the next array 
+		currentQuestion++;
+		var aToTheQ = setTimeout(qDisplay, 5000);
+		
+		//if statement saying if currentQuestion is = to (questions.length-1) send it to the final page 
+		
+	}
+
+//create a function that's the final page displaying your unanswered, correct, and incorrect -->scoreboard
+		function scoreboard(){
+			$('.finalMessage').html('you finished the game.');
+		}		
+
+</script>
+
+
+</body>
+</html>
