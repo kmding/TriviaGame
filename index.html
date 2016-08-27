@@ -39,7 +39,7 @@
 		$(this).hide();
 		go();
 		qDisplay();
-		
+		setTime = 5;
 	});
 	
 	// more timer stuff
@@ -91,58 +91,70 @@
 
 	// display questions
 	function qDisplay(){
-		setTime = 5;
-		go();
 	$('.theOneQuestion').html(questions[currentQuestion].ques);
 
+	// turns the choices in to buttons and displays them
 		for (var i = 0; i < 4; i++) {
 			var selectableAnsw = $('<button>');
 			selectableAnsw.text(questions[currentQuestion].choice[i]);
 			selectableAnsw.attr({'data-index': i});
-			selectableAnsw.addClass('userCell');
+			selectableAnsw.addClass('userCelleck');
 			$('.theAnswers').append(selectableAnsw);
 		} 
 
-		$('.userCell').on("click",function(){
+		$('.userCelleck').on("click",function(){
 				userSelected = $(this).data('index');
 				clearInterval(countDown); 
 				// display real answer
 				realAnswer();
 		});
 	}
-
+// if statements that are based on user inputs
 	function realAnswer(){
 			$('.theAnswers').empty();
 			$('.theOneQuestion').html(" ");
 		if (setTime === 0){
 			unAnsw++;
 			$('.message').html('you ran out of time!');
+			nextQuestion();
 		}
 
 		else if (userSelected == questions[currentQuestion].answer){
 			correctAnsw++;
 			$('.message').html('you got it.');
+			nextQuestion();
 
 		}
 
 		else if (userSelected != questions[currentQuestion].answer){
 			inCorrectAnsw++;
 			$('.message').html('wrong!!!');
+			nextQuestion();
 		}
-		if (currentQuestion == questions.length-1){
-			scoreboard();
-		}
-			//let this hover, this only adds to the next array 
-		currentQuestion++;
-		var aToTheQ = setTimeout(qDisplay, 5000);
+// functions that lead to the next question
+		function nextQuestion(){
+			currentQuestion++;
+			setTime = 7;
+			go();
 		
 		//if statement saying if currentQuestion is = to (questions.length-1) send it to the final page 
+		if (currentQuestion === questions.length){
+			scoreboard();
+			setTime = clearInterval(countdown);
+		}
+
+				
 		
+			
 	}
+	//let this hover, this only adds to the next array 
+	var aToTheQ = setTimeout(qDisplay, 2000);
+}
 
 //create a function that's the final page displaying your unanswered, correct, and incorrect -->scoreboard
 		function scoreboard(){
 			$('.finalMessage').html('you finished the game.');
+
 		}		
 
 </script>
