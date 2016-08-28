@@ -102,7 +102,7 @@
 
 	// display questions
 	function qDisplay(){
-		$('.message').html('');
+		$('.message').html(' ');
 		setTime = 5;
 		$('#timeDisplay').html('<h2>' + setTime + '</h2>');
 		go();
@@ -132,49 +132,43 @@
 		if (setTime === 0){
 			unAnsw++;
 			$('.message').html('you ran out of time!');
-			// nextQuestion();
+			
 		}
 
 		else if (userSelected == questions[currentQuestion].answer){
 			correctAnsw++;
 			$('.message').html('you got it.');
-			// nextQuestion();
+			
 
 		}
 
 		else if (userSelected != questions[currentQuestion].answer){
 			inCorrectAnsw++;
 			$('.message').html('wrong!!!');
-			// nextQuestion();
+			
 		}
 
 		if (currentQuestion === (questions.length-1)){
 			clearInterval(countDown);
-			scoreboard();
-		}else{
+			setTimeout(scoreboard, 2000);
+		}
+		else{
 			setTimeout(qDisplay, 2000);	
 		}
-
+//let this hover, this only adds to the next array 
+// functions that lead to the next question
 		currentQuestion++;
 		
 	}
-// functions that lead to the next question
-		// function nextQuestion(){
-		// 	//if statement saying if currentQuestion is = to (questions.length-1) send it to the final page	
-			
-		// }
-			
-		
-	//let this hover, this only adds to the next array 
-	
 
 
 //create a function that's the final page displaying your unanswered, correct, and incorrect -->scoreboard
 		function scoreboard(){
+			$('.message').html(' ');
 			$('.finalMessage').html('you finished the game.');
-			$('.right').html(correctAnsw);
-			$('.wrong').html(inCorrectAnsw);
-			$('.left').html(unAnsw);
+			$('.right').html('RIGHT: '+ correctAnsw);
+			$('.wrong').html('WRONG: '+inCorrectAnsw);
+			$('.left').html('N/A: '+unAnsw);
 			$('.startButton').show().text('lets go again').click(currentQuestion = 0);
 			
 		}	
