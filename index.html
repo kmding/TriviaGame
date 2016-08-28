@@ -17,17 +17,20 @@
 <div class = 'thisPictureOverHere'></div>
 <!-- scoreboard display -->
 <div class = 'finalMessage'></div>
+<div class = 'right'></div>
+<div class = 'wrong'></div>
+<div class = 'left'></div>
+
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.js"></script>
 <script>
 	// timer int
-	var setTime = 5;
+	var setTime;
 
 	// q tallys
-	var correctAnsw = 0;
-	var inCorrectAnsw = 0;
-	var unAnsw =0;
-
+	var correctAnsw;
+	var inCorrectAnsw;
+	var unAnsw;
 	// user select
 	var userSelected;
 	// the int that moves 'questions var' to the next question
@@ -37,9 +40,7 @@
 	// start button
 	$('.startButton').on("click", function(){
 		$(this).hide();
-		go();
-		qDisplay();
-		setTime = 5;
+		newGame();
 	});
 	
 	// more timer stuff
@@ -86,12 +87,27 @@
 		choice: ["Reporter", "Teacher", "Billionair/Playboy/Philanthropist", "Governer"],
 		answer: 2
 	}]; 
-
-
+	//starts a new game
+	function newGame(){
+		$('.finalMessage').html("");
+		$('.right').html("");
+		$('.wrong').html("");
+		$('.left').html("");
+			currentQuestion = 0
+			correctAnsw = 0;
+			inCorrectAnsw = 0;
+			unAnsw =0;
+			qDisplay();
+	}
 
 	// display questions
 	function qDisplay(){
-	$('.theOneQuestion').html(questions[currentQuestion].ques);
+		$('.message').html('');
+		setTime = 5;
+		$('#timeDisplay').html('<h2>' + setTime + '</h2>');
+		go();
+		$('.theOneQuestion').html(questions[currentQuestion].ques);
+
 
 	// turns the choices in to buttons and displays them
 		for (var i = 0; i < 4; i++) {
@@ -116,46 +132,53 @@
 		if (setTime === 0){
 			unAnsw++;
 			$('.message').html('you ran out of time!');
-			nextQuestion();
+			// nextQuestion();
 		}
 
 		else if (userSelected == questions[currentQuestion].answer){
 			correctAnsw++;
 			$('.message').html('you got it.');
-			nextQuestion();
+			// nextQuestion();
 
 		}
 
 		else if (userSelected != questions[currentQuestion].answer){
 			inCorrectAnsw++;
 			$('.message').html('wrong!!!');
-			nextQuestion();
-		}
-// functions that lead to the next question
-		function nextQuestion(){
-			currentQuestion++;
-			setTime = 7;
-			go();
-		
-		//if statement saying if currentQuestion is = to (questions.length-1) send it to the final page 
-		if (currentQuestion === questions.length){
-			scoreboard();
-			setTime = clearInterval(countdown);
+			// nextQuestion();
 		}
 
-				
+		if (currentQuestion === (questions.length-1)){
+			clearInterval(countDown);
+			scoreboard();
+		}else{
+			setTimeout(qDisplay, 2000);	
+		}
+
+		currentQuestion++;
 		
-			
 	}
+// functions that lead to the next question
+		// function nextQuestion(){
+		// 	//if statement saying if currentQuestion is = to (questions.length-1) send it to the final page	
+			
+		// }
+			
+		
 	//let this hover, this only adds to the next array 
-	var aToTheQ = setTimeout(qDisplay, 2000);
-}
+	
+
 
 //create a function that's the final page displaying your unanswered, correct, and incorrect -->scoreboard
 		function scoreboard(){
 			$('.finalMessage').html('you finished the game.');
+			$('.right').html(correctAnsw);
+			$('.wrong').html(inCorrectAnsw);
+			$('.left').html(unAnsw);
+			$('.startButton').show().text('lets go again').click(currentQuestion = 0);
+			
+		}	
 
-		}		
 
 </script>
 
